@@ -21,7 +21,7 @@ RUN easy_install pip
 
 RUN pip install supervisor 
 
-RUN yum install -y mod_php71w php71w-cli php71w-common php71w-gd php71w-mbstring php71w-mcrypt php71w-mysqlnd php71w-xml php71w-fpm nginx openssl net-tools wget git curl
+RUN yum install -y mod_php71w php71w-cli php71w-common php71w-gd php71w-mbstring php71w-mcrypt php71w-mysqlnd php71w-xml php71w-fpm nginx openssl net-tools wget git curl nmap vim nano tree php71w-pgsql install php71w-devel php71w-pear php71w-pecl-xdebug
 
 RUN mkdir /var/www/html -p
 
@@ -31,7 +31,7 @@ RUN chmod 755 /scripts/*
 
 EXPOSE 80
 
-RUN yum -y install nmap vim tree
+# RUN yum -y install nmap vim tree
 
 RUN chown -R apache:apache /var/www/html
 
@@ -49,13 +49,11 @@ RUN mv /srv/composer.phar /usr/local/bin/composer
 
 RUN /usr/local/bin/composer global require "laravel/installer"
 
-#ENV PATH "/root/.composer/vendor/bin"
-
-RUN yum -y install nano
-
 RUN echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc
 
-#ENV PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.composer/vendor/bin"
+RUN composer global require "laravel/installer"
+
+WORKDIR /var/www/html
 
 # Executing supervisord
 CMD ["supervisord", "-n"]
